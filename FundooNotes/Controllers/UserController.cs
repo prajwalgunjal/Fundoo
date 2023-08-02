@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interfaces;
 using CommonLayer.Models;
+using CommonLayer.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -30,6 +31,18 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(LoginModel loginModel)
+        {
+            var result = iUserBusiness.Login(loginModel);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<string> { Success = true, Message = "Login Successfull", Data = result });
+            }
+            else
+                return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
+        }
 
     }
 }

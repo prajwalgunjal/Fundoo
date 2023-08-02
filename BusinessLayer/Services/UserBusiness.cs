@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interfaces;
 using CommonLayer.Models;
+using CommonLayer.RequestModels;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
@@ -19,6 +20,11 @@ namespace BusinessLayer.Services
         public UserEntity Regsiter(RegistrationModel registrationModel)
         {
             return userRepository.Regsiter(registrationModel);
+        }
+
+        public string Login(LoginModel loginModel)
+        {
+            return userRepository.Login(loginModel);
         }
     }
 }

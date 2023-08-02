@@ -35,6 +35,7 @@ namespace FundooNotes
             services.AddDbContext<Fundoo_Context>(x => x.UseSqlServer(Configuration["ConnectionString:FundooConnection"]));
             services.AddTransient<IUserRepo, UserRepo>();
             services.AddTransient<IUserBusiness, UserBusiness>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +45,15 @@ namespace FundooNotes
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // This middleware serves generated Swagger document as a JSON endpoint
+            app.UseSwagger();
+
+            // This middleware serves the Swagger documentation UI
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fundoo API V1");
+            });
 
             app.UseHttpsRedirection();
 
