@@ -4,6 +4,8 @@ using CommonLayer.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
+using RepositoryLayer.Services;
+using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
@@ -44,5 +46,14 @@ namespace FundooNotes.Controllers
                 return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
         }
 
+        [HttpPost("forget-password")]
+        public async Task<IActionResult> UserForgetPassword(string email)
+        {
+            UserRepo userRepo = new UserRepo();
+            if (userRepo.CheckEmail(email))
+            {
+
+            }
+        }
     }
 }

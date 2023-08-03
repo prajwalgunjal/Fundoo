@@ -25,60 +25,109 @@ namespace RepositoryLayer.Services
         }
         public UserEntity Regsiter(RegistrationModel registrationModel)
         {
-            UserEntity userEntity = new UserEntity();
-            bool emailExists = fundoo_Context.Users.Any(x => x.Email == registrationModel.Email);
-            userEntity.FirstName = registrationModel.FirstName;
-            userEntity.LastName = registrationModel.LastName;
-            userEntity.Email = registrationModel.Email;
-            userEntity.Password = EncodePasswordToBase64(registrationModel.Password);
-            userEntity.createdAt = DateTime.Now;
-            userEntity.updatedAt = DateTime.Now;
-            if (!emailExists)
+            try
             {
-                fundoo_Context.Users.Add(userEntity);
-                fundoo_Context.SaveChanges();
-                return userEntity;
+                UserEntity userEntity = new UserEntity();
+                bool emailExists = fundoo_Context.Users.Any(x => x.Email == registrationModel.Email);
+                userEntity.FirstName = registrationModel.FirstName;
+                userEntity.LastName = registrationModel.LastName;
+                userEntity.Email = registrationModel.Email;
+                userEntity.Password = EncodePasswordToBase64(registrationModel.Password);
+                userEntity.createdAt = DateTime.Now;
+                userEntity.updatedAt = DateTime.Now;
+                if (!emailExists)
+                {
+                    fundoo_Context.Users.Add(userEntity);
+                    fundoo_Context.SaveChanges();
+                    return userEntity;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+
+                throw ex;
+            }
+            
+            
+        }
+        public bool CheckEmail(string email, RegistrationModel registrationModel)
+        {
+            try
+            {
+                bool emailExists = fundoo_Context.Users.Any(x => x.Email == registrationModel.Email);
+                if (emailExists)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
             
         }
 
+
         public string Login(LoginModel loginModel) {
-            string encodedPassword = EncodePasswordToBase64(loginModel.Password);
-            var checkEmail = fundoo_Context.Users.FirstOrDefault(x => x.Email == loginModel.Email);
-            var checkPassword = fundoo_Context.Users.FirstOrDefault(x => x.Password == encodedPassword);
 
-            if (checkEmail  != null && checkPassword != null)
+            try
             {
-                var token = GenerateToken(checkEmail.Email,checkEmail.UserId);
-                return token;
+                string encodedPassword = EncodePasswordToBase64(loginModel.Password);
+                var checkEmail = fundoo_Context.Users.FirstOrDefault(x => x.Email == loginModel.Email);
+                var checkPassword = fundoo_Context.Users.FirstOrDefault(x => x.Password == encodedPassword);
+
+                if (checkEmail != null && checkPassword != null)
+                {
+                    var token = GenerateToken(checkEmail.Email, checkEmail.UserId);
+                    return token;
+                }
+
+                else
+                {
+                    return null;
+                }
+
             }
-
-            else
+            catch (Exception ex)
             {
-                return null;
+
+                throw ex;
             }
             
         }
         private string GenerateToken(string Email ,int userID)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
+            try
             {
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                var claims = new[]
+                {
                 new Claim("Email",Email),
                 new Claim("userID",userID.ToString())
             };
-            var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
-                configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials);
+                var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
+                    configuration["Jwt:Audience"],
+                    claims,
+                    expires: DateTime.Now.AddMinutes(15),
+                    signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
 
         }
 
