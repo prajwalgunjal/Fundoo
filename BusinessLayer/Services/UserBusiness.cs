@@ -6,6 +6,7 @@ using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace BusinessLayer.Services
@@ -25,6 +26,15 @@ namespace BusinessLayer.Services
         public string Login(LoginModel loginModel)
         {
             return userRepository.Login(loginModel);
+        }
+        public bool CheckEmail(string email)
+        {
+            return userRepository.CheckEmail(email);
+        }
+
+        public ForgotPasswordModel UserForgotPassword(string email)
+        {
+            return userRepository.UserForgotPassword(email);
         }
     }
 }

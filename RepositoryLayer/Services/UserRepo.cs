@@ -54,11 +54,11 @@ namespace RepositoryLayer.Services
             
             
         }
-        public bool CheckEmail(string email, RegistrationModel registrationModel)
+        public bool CheckEmail(string email)
         {
             try
             {
-                bool emailExists = fundoo_Context.Users.Any(x => x.Email == registrationModel.Email);
+                bool emailExists = fundoo_Context.Users.Any(x => x.Email == email);
                 if (emailExists)
                 {
                     return true;
@@ -104,6 +104,25 @@ namespace RepositoryLayer.Services
             }
             
         }
+
+        public ForgotPasswordModel UserForgotPassword(string email)
+        {
+            try
+            {
+                var result = fundoo_Context.Users.Where(x => x.Email == email).FirstOrDefault();
+
+                ForgotPasswordModel forgotPasswordModel = new ForgotPasswordModel();
+                forgotPasswordModel.Email = result.Email;
+                forgotPasswordModel.Token = GenerateToken(result.Email, result.UserId);
+                forgotPasswordModel.UserID = result.UserId;
+                return forgotPasswordModel;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+ 
+        }
         private string GenerateToken(string Email ,int userID)
         {
             try
@@ -112,13 +131,13 @@ namespace RepositoryLayer.Services
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
                 var claims = new[]
                 {
-                new Claim("Email",Email),
+                new Claim(ClaimTypes.Email,Email), // you can use enum from claimtypes 
                 new Claim("userID",userID.ToString())
             };
                 var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
                     configuration["Jwt:Audience"],
                     claims,
-                    expires: DateTime.Now.AddMinutes(15),
+                    expires: DateTime.Now.AddMinutes(60),
                     signingCredentials: credentials);
 
                 return new JwtSecurityTokenHandler().WriteToken(token);
@@ -130,6 +149,7 @@ namespace RepositoryLayer.Services
             
 
         }
+        
 
         public static string EncodePasswordToBase64(string password)
         {

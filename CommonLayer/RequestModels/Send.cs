@@ -19,7 +19,7 @@ namespace CommonLayer.RequestModels
             message.IsBodyHtml = true;
 
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com",587);
-            NetworkCredential credential = new NetworkCredential("prajwalgunjal86@gmail.com","hehyshaksbabjahyd");
+            NetworkCredential credential = new NetworkCredential("prajwalgunjal86@gmail.com", "cdxmzfkzoyocltbp");
 
             smtpClient.EnableSsl = true;    
             smtpClient.UseDefaultCredentials = false;

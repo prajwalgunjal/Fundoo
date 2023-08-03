@@ -4,9 +4,11 @@ using System.Text;
 
 namespace CommonLayer.RequestModels
 {
-    public class LoginModel
+    public class ForgotPasswordModel
     {
+        public int UserID { get; set; }
+
         public string Email { get; set; }
-        public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

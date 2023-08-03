@@ -8,6 +8,8 @@ namespace BusinessLayer.Interfaces
     {
         public UserEntity Regsiter(RegistrationModel registrationModel);
         public string Login(LoginModel loginModel);
+        public bool CheckEmail(string email);
+        public ForgotPasswordModel UserForgotPassword(string email);
     }
 
 

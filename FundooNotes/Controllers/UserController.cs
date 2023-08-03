@@ -1,10 +1,13 @@
 ﻿using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 using CommonLayer.Models;
 using CommonLayer.RequestModels;
+using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
@@ -13,10 +16,12 @@ namespace FundooNotes.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IBus _bus;
         private IUserBusiness iUserBusiness;
-        public UserController (IUserBusiness iUserBusiness)
+        public UserController (IUserBusiness iUserBusiness, IBus _bus)
         {
             this.iUserBusiness = iUserBusiness;
+            this._bus = _bus;
         }
         [HttpPost]
         // request url:-  localhost/Controller_name/MethodRoute
@@ -49,11 +54,33 @@ namespace FundooNotes.Controllers
         [HttpPost("forget-password")]
         public async Task<IActionResult> UserForgetPassword(string email)
         {
-            UserRepo userRepo = new UserRepo();
-            if (userRepo.CheckEmail(email))
+            
+            try
             {
+                if (iUserBusiness.CheckEmail(email))
+                {
+                    Send send = new Send();
+                    ForgotPasswordModel forgotPasswordModel = iUserBusiness.UserForgotPassword(email);
 
+                    Uri uri = new Uri("rabbitmq://localhost/FundooNotesEmail_Queue");
+                    var endPoint = await _bus.GetSendEndpoint(uri);
+
+                    await endPoint.Send(forgotPasswordModel);
+                    send.SendingMail(forgotPasswordModel.Email, forgotPasswordModel.Token);
+
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Email sent ", Data = email });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not send succesfull", Data = null });
+
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }
