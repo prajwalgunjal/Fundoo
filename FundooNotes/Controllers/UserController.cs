@@ -54,7 +54,6 @@ namespace FundooNotes.Controllers
         [HttpPost("forget-password")]
         public async Task<IActionResult> UserForgetPassword(string email)
         {
-            
             try
             {
                 if (iUserBusiness.CheckEmail(email))
@@ -67,20 +66,21 @@ namespace FundooNotes.Controllers
 
                     await endPoint.Send(forgotPasswordModel);
                     send.SendingMail(forgotPasswordModel.Email, forgotPasswordModel.Token);
-
                     return Ok(new ResponseModel<string> { Success = true, Message = "Email sent ", Data = email });
                 }
                 else
                 {
                     return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not send succesfull", Data = null });
-
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
     }
 }
+
+
+// resetpassword model  :- pass and confirm_password
+// string email , resetPass 

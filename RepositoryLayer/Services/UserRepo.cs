@@ -48,11 +48,8 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
-            }
-            
-            
+            } 
         }
         public bool CheckEmail(string email)
         {
