@@ -45,7 +45,7 @@ namespace RepositoryLayer.Services
                 {
                     return null;
                 }
-            }
+        }
             catch (Exception ex)
             {
                 throw ex;
@@ -120,6 +120,25 @@ namespace RepositoryLayer.Services
             }
  
         }
+
+        public ResetPassword ForgetPassword(string email,ResetPassword reset)
+        {
+            try
+            {
+                if (reset.ConfirmResetPassword.Equals(reset.Password))
+                {
+                    var result = fundoo_Context.Users.Where(x => x.Email == email).FirstOrDefault();
+                    reset.Password = EncodePasswordToBase64(reset.Password);
+                    fundoo_Context.SaveChanges();
+                }
+                    return reset;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         private string GenerateToken(string Email ,int userID)
         {
             try
@@ -128,7 +147,7 @@ namespace RepositoryLayer.Services
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
                 var claims = new[]
                 {
-                new Claim(ClaimTypes.Email,Email), // you can use enum from claimtypes 
+                new Claim("Email",Email), // you can use enum from claimtypes 
                 new Claim("userID",userID.ToString())
             };
                 var token = new JwtSecurityToken(configuration["Jwt:Issuer"],

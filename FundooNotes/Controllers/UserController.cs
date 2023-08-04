@@ -3,6 +3,7 @@ using BusinessLayer.Services;
 using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -50,6 +51,24 @@ namespace FundooNotes.Controllers
             else
                 return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
         }
+        [Authorize]
+        [HttpPost("Reset Password")]
+        public IActionResult ResetPassword(ResetPassword resetPassword)
+        {
+            string email = User.FindFirst(x => x.Type == "Email").Value;
+            var result = iUserBusiness.ForgetPassword(email,resetPassword);
+            if(result != null)
+            {
+                return Ok(new ResponseModel<ResetPassword> { Success = true, Message = "password reset succesfull", Data = result });
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<ResetPassword> { Success = false, Message = "not reset succesfull", Data = null });
+            }
+        }
+
+
+
 
         [HttpPost("forget-password")]
         public async Task<IActionResult> UserForgetPassword(string email)
