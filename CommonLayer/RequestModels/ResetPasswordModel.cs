@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CommonLayer.RequestModels
 {
-    public class ResetPassword
+    public class ResetPasswordModel
     {
         public string Password { get; set; }    
         public string ConfirmResetPassword { get; set; }

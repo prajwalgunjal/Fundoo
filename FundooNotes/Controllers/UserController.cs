@@ -53,17 +53,17 @@ namespace FundooNotes.Controllers
         }
         [Authorize]
         [HttpPost("Reset Password")]
-        public IActionResult ResetPassword(ResetPassword resetPassword)
+        public IActionResult ResetPassword(ResetPasswordModel resetPassword)
         {
             string email = User.FindFirst(x => x.Type == "Email").Value;
             var result = iUserBusiness.ForgetPassword(email,resetPassword);
             if(result != null)
             {
-                return Ok(new ResponseModel<ResetPassword> { Success = true, Message = "password reset succesfull", Data = result });
+                return Ok(new ResponseModel<ResetPasswordModel> { Success = true, Message = "password reset succesfull", Data = result });
             }
             else
             {
-                return BadRequest(new ResponseModel<ResetPassword> { Success = false, Message = "not reset succesfull", Data = null });
+                return BadRequest(new ResponseModel<ResetPasswordModel> { Success = false, Message = "not reset succesfull", Data = null });
             }
         }
 
@@ -77,7 +77,7 @@ namespace FundooNotes.Controllers
             {
                 if (iUserBusiness.CheckEmail(email))
                 {
-                    Send send = new Send();
+                    SendEmail send = new SendEmail();
                     ForgotPasswordModel forgotPasswordModel = iUserBusiness.UserForgotPassword(email);
 
                     Uri uri = new Uri("rabbitmq://localhost/FundooNotesEmail_Queue");

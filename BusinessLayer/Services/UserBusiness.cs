@@ -36,7 +36,7 @@ namespace BusinessLayer.Services
         {
             return userRepository.UserForgotPassword(email);
         }
-        public ResetPassword ForgetPassword(string email, ResetPassword reset)
+        public ResetPasswordModel ForgetPassword(string email, ResetPasswordModel reset)
         {
             return userRepository.ForgetPassword(email, reset);
         }

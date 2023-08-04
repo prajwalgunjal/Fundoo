@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CommonLayer.RequestModels
 {
-    public class Send
+    public class SendEmail
     {
         public string SendingMail(string emailTo , string token)
         {

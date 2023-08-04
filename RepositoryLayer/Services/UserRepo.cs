@@ -121,7 +121,7 @@ namespace RepositoryLayer.Services
  
         }
 
-        public ResetPassword ForgetPassword(string email,ResetPassword reset)
+        public ResetPasswordModel ForgetPassword(string email,ResetPasswordModel reset)
         {
             try
             {
