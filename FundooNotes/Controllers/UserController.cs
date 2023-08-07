@@ -51,6 +51,7 @@ namespace FundooNotes.Controllers
             else
                 return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
         }
+
         [Authorize]
         [HttpPost("Reset Password")]
         public IActionResult ResetPassword(ResetPasswordModel resetPassword)
