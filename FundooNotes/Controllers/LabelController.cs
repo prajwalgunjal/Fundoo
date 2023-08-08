@@ -36,6 +36,24 @@ namespace FundooNotes.Controllers
             }
         }
         [HttpPost]
+        [Route("DisplayByLabel")]
+        public IActionResult DisplayByLabel(string label)
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result =ilabelBusiness.DisplayByLabel(label, userID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Data Displayed", Data = result });
+
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<List<NoteEntity>> { Success = false, Message = "Data not Found", Data = null });
+
+            }
+        }
+
+        [HttpPost]
         [Route("GetLabels")]
         public IActionResult GetLabels(string label)
         {
@@ -49,7 +67,7 @@ namespace FundooNotes.Controllers
             }
             else
             {
-                return NotFound(new ResponseModel<List<LabelEntity>> { Success = false, Message = "label not Found", Data = null });
+                return BadRequest(new ResponseModel<List<LabelEntity>> { Success = false, Message = "label not Found", Data = null });
 
             }
         }

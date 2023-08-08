@@ -40,5 +40,9 @@ namespace BusinessLayer.Services
         {
             return userRepository.ForgetPassword(email, reset);
         }
+        public string ByPassLogin()
+        {
+            return userRepository.ByPassLogin();
+        }
     }
 }

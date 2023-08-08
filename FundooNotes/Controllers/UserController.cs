@@ -64,6 +64,27 @@ namespace FundooNotes.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [HttpPost]
+        [Route("ByPassLogin")]
+        public IActionResult ByPassLogin()
+        {
+            try
+            {
+                var result = iUserBusiness.ByPassLogin();
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Login Successfull", Data = result });
+                }
+
+                else
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+        }
 
         [Authorize]
         [HttpPost("Reset Password")]

@@ -24,5 +24,10 @@ namespace BusinessLayer.Services
         {
             return LabelRepo.GetLabels(label,userID);
         }
+
+        public List<NoteEntity> DisplayByLabel(string label, int userID)
+        {
+            return LabelRepo.DisplayByLabel(label,userID);
+        }
     }
 }

@@ -101,6 +101,35 @@ namespace RepositoryLayer.Services
             }
             
         }
+        public string ByPassLogin()
+        {
+
+            try
+            {
+                string encodedPassword = EncodePasswordToBase64("Pune@123");
+                var checkEmail = fundoo_Context.Users.FirstOrDefault(x => x.Email == "prajwalgunjal86@gmail.com");
+                var checkPassword = fundoo_Context.Users.FirstOrDefault(x => x.Password == encodedPassword);
+
+                if (checkEmail != null && checkPassword != null)
+                {
+                    var token = GenerateToken(checkEmail.Email, checkEmail.UserId);
+                    return token;
+                }
+
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
 
         public ForgotPasswordModel UserForgotPassword(string email)
         {

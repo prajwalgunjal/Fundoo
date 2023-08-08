@@ -241,10 +241,6 @@ namespace RepositoryLayer.Services
             try
             {
                 int id = fundoo_Context_Note.Users.Where(x => x.UserId == userID).Select(x => x.UserId).FirstOrDefault();
-
-                //bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == id);
-                //  string email = idExist.
-                // bool EmailExist = fundoo_Context_Note.Users.Any(x => x.Email == idExist.ema);
                 bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == id);
                 if (idExist)
                 {

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
+using RepositoryLayer.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,24 @@ namespace RepositoryLayer.Services
             }
             else
                 return null;
+        }
+
+        public List<NoteEntity> DisplayByLabel(string label, int userID)
+        {
+            int noteId;
+            List<NoteEntity> noteEntity;
+            bool checkLabel = fundoo_Context_Note.Labels.Any(x => x.Label == label && x.UserId == userID);
+            noteId = fundoo_Context_Note.Labels.Where(x => x.Label == label).Select(x => x.noteID).FirstOrDefault();
+
+            if (checkLabel)
+            {
+               noteEntity = fundoo_Context_Note.Notes.Where(x => x.noteID == noteId).ToList();
+               return noteEntity;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
