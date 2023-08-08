@@ -67,11 +67,13 @@ namespace FundooNotes.Controllers
              }
          }*/
         [HttpGet("Display")]
-        public IActionResult Display(string emailid)
+            public IActionResult Display()
         {
             try
             {
-                var result = iNoteBusiness.GetAll(emailid);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.GetAll(userID);
 
                 if (result != null)
                 {
@@ -79,7 +81,7 @@ namespace FundooNotes.Controllers
                 }
                 else
                 {
-                    return NotFound(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found", Data = null });
+                    return BadRequest(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found", Data = null });
                 }
             }
             catch (Exception ex)
@@ -96,15 +98,15 @@ namespace FundooNotes.Controllers
 
             try
             {
-                var result = iNoteBusiness.ChangeColour(noteId, colour);
-
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+                var result = iNoteBusiness.ChangeColour(noteId, colour, userID);
                 if (result != null)
                 {
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Colour changed successfull" });
                 }
                 else
                 {
-                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "colour not changed", Data = null });
+                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "colour not changed", Data = null });
                 }
             }
             catch (Exception ex)
@@ -122,7 +124,9 @@ namespace FundooNotes.Controllers
 
             try
             {
-                var result = iNoteBusiness.SetReminder(noteId, dateTime);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.SetReminder(noteId, dateTime, userID);
 
                 if (result == dateTime)
                 {
@@ -130,7 +134,7 @@ namespace FundooNotes.Controllers
                 }
                 else
                 {
-                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Reminder not set successfull", Data = null });
+                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Reminder not set successfull", Data = null });
                 }
             }
             catch (Exception ex)
@@ -143,11 +147,12 @@ namespace FundooNotes.Controllers
 
         [HttpPost]
         [Route("Edit")]
-        public IActionResult EditANote(TakeANoteModel takeANoteModel,int userID, int noteId)
+        public IActionResult EditANote(TakeANoteModel takeANoteModel, int noteId)
         {
 
             try
             {
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
                 var result = iNoteBusiness.EditANote(takeANoteModel, userID, noteId);
 
                 if (result != null)
@@ -156,7 +161,8 @@ namespace FundooNotes.Controllers
                 }
                 else
                 {
-                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
                 }
             }
             catch (Exception ex)
@@ -175,7 +181,9 @@ namespace FundooNotes.Controllers
 
             try
             {
-                var result = iNoteBusiness.isPin(noteId);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.isPin(noteId, userID);
                 //throw new Exception("Error");
 
                 if (result)
@@ -183,10 +191,10 @@ namespace FundooNotes.Controllers
                     logger.LogInformation("Pinned Note successfully");
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Pinned", Data = result });
                 }
-               
+                
                 else
                 {
-                    return NotFound(new ResponseModel<bool> { Success = false, Message = "unPinned", Data = result });
+                    return BadRequest(new ResponseModel<bool> { Success = false, Message = "unPinned", Data = result });
                 }
             }
             catch (Exception ex)
@@ -204,7 +212,9 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var result = iNoteBusiness.IsArchive(noteId);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.IsArchive(noteId, userID);
                 if (result)
                 {
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Archived", Data = result });
@@ -229,7 +239,8 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                var result = iNoteBusiness.TrashNotes(noteId);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+                var result = iNoteBusiness.TrashNotes(noteId,userID);
                 if (result)
                 {
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Trashed", Data = result });
@@ -250,15 +261,17 @@ namespace FundooNotes.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public IActionResult Delete_A_Note(int userID)
+        public IActionResult Delete_A_Note(int noteID)
         {
             try
             {
-                var result = iNoteBusiness.Delete_A_note(userID);
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.Delete_A_note(userID,noteID);
 
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note Delete successfully" });
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note Delete successfully", Data = result});
                 }
                 else
                 {

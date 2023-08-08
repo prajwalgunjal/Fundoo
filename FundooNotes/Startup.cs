@@ -43,6 +43,8 @@ namespace FundooNotes
             services.AddTransient<INoteBusiness, NoteBusiness>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<ILabelBusiness,LabelBusiness>();
+            services.AddTransient<ICollabRepo, CollabRepo>();
+            services.AddTransient<ICollabBusiness, CollabBusiness>();
 
             services.AddSwaggerGen();
 
@@ -138,7 +140,7 @@ namespace FundooNotes
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

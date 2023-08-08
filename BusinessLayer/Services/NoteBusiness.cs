@@ -23,37 +23,37 @@ namespace BusinessLayer.Services
          {
              return noteRepo.DisplayNote(userID);
          }*/
-        public List<NoteEntity> GetAll(string emailid)
+        public List<NoteEntity> GetAll(int userID)
         {
-            return noteRepo.GetAll(emailid);
+            return noteRepo.GetAll(userID);
         }
         public NoteEntity EditANote(TakeANoteModel takeANoteModel, int userID, int noteId)
         {
             return noteRepo.EditANote(takeANoteModel,userID,noteId);
         }
-        public string Delete_A_note(int userID)
+        public NoteEntity Delete_A_note(int userID, int noteID)
         {
-            return noteRepo.Delete_A_note(userID);
+            return noteRepo.Delete_A_note(userID,noteID);
         }
-        public bool isPin(int noteId)
+        public bool isPin(int noteId, int userID)
         {
-            return noteRepo.isPin(noteId);
+            return noteRepo.isPin(noteId,userID);
         }
-        public bool TrashNotes(int noteId)
+        public bool TrashNotes(int noteId, int userID)
         {
-            return noteRepo.TrashNotes(noteId);
+            return noteRepo.TrashNotes(noteId,userID);
         }
-        public bool IsArchive(int noteId)
+        public bool IsArchive(int noteId , int userID)
         {
-            return noteRepo.IsArchive(noteId);
+            return noteRepo.IsArchive(noteId ,userID);
         }
-        public string ChangeColour(int noteId, string colour)
+        public string ChangeColour(int noteId, string colour, int userID)
         {
-            return noteRepo.ChangeColour(noteId, colour);
+            return noteRepo.ChangeColour(noteId, colour, userID);
         }
-        public DateTime SetReminder(int noteId, DateTime dateTime)
+        public DateTime SetReminder(int noteId, DateTime dateTime, int userID)
         {
-            return noteRepo.SetReminder(noteId,dateTime);
+            return noteRepo.SetReminder(noteId,dateTime, userID);
         }
     }
 }

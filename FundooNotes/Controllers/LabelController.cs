@@ -4,6 +4,7 @@ using CommonLayer.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Migrations;
+using System;
 using System.Collections.Generic;
 
 namespace FundooNotes.Controllers
@@ -19,8 +20,10 @@ namespace FundooNotes.Controllers
         }
         [HttpPost]
         [Route("AddLabel")]
-        public IActionResult AddLabel(LabelModel labelModel, int userID, int noteID)
+        public IActionResult AddLabel(LabelModel labelModel, int noteID)
         {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
             var result = ilabelBusiness.AddLabel(labelModel, userID, noteID);
             if (result != null)
             {
@@ -36,7 +39,9 @@ namespace FundooNotes.Controllers
         [Route("GetLabels")]
         public IActionResult GetLabels(string label)
         {
-            var result = ilabelBusiness.GetLabels(label);
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+            var result = ilabelBusiness.GetLabels(label, userID);
             if (result != null)
             {
                 return Ok(new ResponseModel<List<LabelEntity>> { Success = true, Message = "label Displayed", Data = result});

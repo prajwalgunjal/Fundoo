@@ -20,9 +20,9 @@ namespace BusinessLayer.Services
         {
             return LabelRepo.AddLabel(labelModel,userID,noteID);
         }
-        public List<LabelEntity> GetLabels(string label)
+        public List<LabelEntity> GetLabels(string label, int userID)
         {
-            return LabelRepo.GetLabels(label);
+            return LabelRepo.GetLabels(label,userID);
         }
     }
 }

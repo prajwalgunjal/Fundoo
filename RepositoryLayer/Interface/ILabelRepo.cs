@@ -7,6 +7,6 @@ namespace RepositoryLayer.Interface
     public interface ILabelRepo
     {
         public LabelEntity AddLabel(LabelModel labelModel, int userID, int noteID);
-        public List<LabelEntity> GetLabels(string label);
+        public List<LabelEntity> GetLabels(string label, int userID);
     }
 }

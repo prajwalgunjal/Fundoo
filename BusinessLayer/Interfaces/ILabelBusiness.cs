@@ -9,6 +9,6 @@ namespace BusinessLayer.Interfaces
     public interface ILabelBusiness
     {
         public LabelEntity AddLabel(LabelModel labelModel, int userID, int noteID);
-        public List<LabelEntity> GetLabels(string label);
+        public List<LabelEntity> GetLabels(string label, int userID);
     }
 }

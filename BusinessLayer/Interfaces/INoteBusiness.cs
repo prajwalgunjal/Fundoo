@@ -9,13 +9,14 @@ namespace BusinessLayer.Interfaces
     public interface INoteBusiness
     {
         public NoteEntity TakeANote(TakeANoteModel takeANoteModel, int userID);
-        public List<NoteEntity> GetAll(string emailid);
+        public List<NoteEntity> GetAll(int userID);
         public NoteEntity EditANote(TakeANoteModel takeANoteModel,int userID, int noteId);
-        public string Delete_A_note(int userID);
-        public bool isPin(int noteId);
-        public bool TrashNotes(int noteId);
-        public bool IsArchive(int noteId);
-        public string ChangeColour(int noteId, string colour);
-        public DateTime SetReminder(int noteId, DateTime dateTime);
+        public NoteEntity Delete_A_note(int userID, int noteID);
+        public bool isPin(int noteId,int userID);
+        public bool TrashNotes(int noteId, int userID);
+        public bool IsArchive(int noteId,int userID);
+        public string ChangeColour(int noteId, string colour, int userID);
+
+        public DateTime SetReminder(int noteId, DateTime dateTime, int userID);
     }
 }

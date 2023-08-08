@@ -31,9 +31,9 @@ namespace RepositoryLayer.Services
             fundoo_Context_Note.SaveChanges();
             return labelEntity;
         }
-        public List<LabelEntity> GetLabels(string label)
-        {
-            List<LabelEntity> labelEntities = fundoo_Context_Note.Labels.Where(x => x.Label == label).ToList();
+        public List<LabelEntity> GetLabels(string label, int userID)
+        {   
+            List<LabelEntity> labelEntities = fundoo_Context_Note.Labels.Where(x => x.Label == label && x.UserId == userID).ToList();
             if (labelEntities != null)
             {
 

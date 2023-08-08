@@ -89,11 +89,11 @@ namespace RepositoryLayer.Services
            
         }
 
-        public string ChangeColour(int noteId, string colour)
+        public string ChangeColour(int noteId, string colour,int userID)
         {
             try
             {
-                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
+                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId && x.UserId == userID);
                 if (idExist)
                 {
                     NoteEntity noteEntity = fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
@@ -113,11 +113,10 @@ namespace RepositoryLayer.Services
            
         }
 
-        public DateTime SetReminder(int noteId,DateTime dateTime)
+        public DateTime SetReminder(int noteId,DateTime dateTime, int userID)
         {
-                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
+                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId && x.UserId == userID);
                 NoteEntity noteEntity = fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
-
                 if (idExist)
                 {
                     noteEntity.reminder =dateTime;
@@ -134,11 +133,11 @@ namespace RepositoryLayer.Services
         }
 
 
-        public bool isPin(int noteId)
+        public bool isPin(int noteId,int userID)
         {
             try
             {
-                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
+                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId && x.UserId == userID);
                 if (noteEntity.pin == false)
                 {
                     noteEntity.pin = true;
@@ -151,7 +150,7 @@ namespace RepositoryLayer.Services
                     noteEntity.pin = false;
                     noteEntity.unPin = true;
                     fundoo_Context_Note.SaveChanges();
-                    return noteEntity.unPin;
+                    return noteEntity.pin;
                 }
             }
             catch (Exception ex)
@@ -162,11 +161,12 @@ namespace RepositoryLayer.Services
            
         }
 
-        public bool TrashNotes (int noteId)
+        public bool TrashNotes (int noteId ,int userID)
         {
             try
             {
-                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
+
+                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId && x.UserId == userID);
                 if (noteEntity.trash == false)
                 {
                     noteEntity.trash = true;
@@ -177,7 +177,7 @@ namespace RepositoryLayer.Services
                 {
                     noteEntity.trash = false;
                     fundoo_Context_Note.SaveChanges();
-                    return noteEntity.unPin;
+                    return noteEntity.trash;
                 }
             }
             catch (Exception ex)
@@ -186,11 +186,11 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
-        public bool IsArchive(int noteId)
+        public bool IsArchive(int noteId,int userID)
         {
             try
             {
-                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
+                NoteEntity noteEntity = this.fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId && x.UserId == userID);
                 if (noteEntity.archive == false)
                 {
                     noteEntity.archive = true;
@@ -211,20 +211,17 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public string Delete_A_note(int userID)
+        public NoteEntity Delete_A_note(int userID , int noteID)
         {
             try
             {
-                bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == userID);
+                bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == userID && x.noteID == noteID);
                 if (idExist)
                 {
-                    var notesToDelete = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).ToList();
-                    foreach (var note in notesToDelete)
-                    {
-                        fundoo_Context_Note.Notes.Remove(note);
-                    }
+                    NoteEntity notesToDelete = fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteID);
+                    fundoo_Context_Note.Notes.Remove(notesToDelete);
                     fundoo_Context_Note.SaveChanges();
-                    return "Note deleted";
+                    return notesToDelete;
                 }
                 else
                 {
@@ -239,11 +236,11 @@ namespace RepositoryLayer.Services
            
         }
 
-        public List<NoteEntity> GetAll(string emailid)
+        public List<NoteEntity> GetAll(int userID)
         {
             try
             {
-                int id = fundoo_Context_Note.Users.Where(x => x.Email == emailid).Select(x => x.UserId).FirstOrDefault();
+                int id = fundoo_Context_Note.Users.Where(x => x.UserId == userID).Select(x => x.UserId).FirstOrDefault();
 
                 //bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == id);
                 //  string email = idExist.
@@ -261,7 +258,6 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
           
