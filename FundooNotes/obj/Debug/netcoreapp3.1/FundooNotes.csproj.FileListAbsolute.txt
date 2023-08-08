@@ -75,3 +75,7 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\Fund
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.pdb
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.genruntimeconfig.cache
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.config

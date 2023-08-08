@@ -3,6 +3,7 @@ using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Migrations;
 using System;
@@ -15,27 +16,39 @@ namespace FundooNotes.Controllers
     public class NoteController : ControllerBase
     {
         private INoteBusiness iNoteBusiness;
-        public NoteController(INoteBusiness iNoteBusiness)
+        private ILogger<UserController> logger;
+        public NoteController(INoteBusiness iNoteBusiness, ILogger<UserController> logger)
         {
             this.iNoteBusiness = iNoteBusiness;
-
+            this.logger = logger;
         }
         [HttpPost]
         // request url:-  localhost/Controller_name/MethodRoute
         [Route("AddNote")]
         public ActionResult takeANote(TakeANoteModel takeANoteModel)
         {
-            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-            var result = iNoteBusiness.TakeANote(takeANoteModel, userID);
-            if (result != null)
+            try
             {
-                return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note added Successfull", Data = result });
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+                var result = iNoteBusiness.TakeANote(takeANoteModel, userID);
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note added Successfull", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Not Registred", Data = null });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Not Registred", Data = null });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
         }
+       
+
         /* [HttpGet]
          [Route("Display")]
          public ActionResult DisplayNote()
@@ -56,32 +69,102 @@ namespace FundooNotes.Controllers
         [HttpGet("Display")]
         public IActionResult Display(string emailid)
         {
-            var result = iNoteBusiness.GetAll(emailid);
+            try
+            {
+                var result = iNoteBusiness.GetAll(emailid);
 
-            if (result != null)
-            {
-                return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Display successfull", Data = result });
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Display successfull", Data = result });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found", Data = null });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found", Data = null });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
+        }
+        [HttpPatch]
+        [Route("ChangeColour")]
+        public IActionResult ChangeColour(int noteId, string colour)
+        {
+
+            try
+            {
+                var result = iNoteBusiness.ChangeColour(noteId, colour);
+
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Colour changed successfull" });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "colour not changed", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+            
+        }
+
+        [HttpPatch]
+        [Route("SetReminder")]
+        public IActionResult SetReminder(int noteId,DateTime dateTime)
+        {
+
+            try
+            {
+                var result = iNoteBusiness.SetReminder(noteId, dateTime);
+
+                if (result == dateTime)
+                {
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Reminder set successfull" });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Reminder not set successfull", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+            
         }
 
         [HttpPost]
         [Route("Edit")]
         public IActionResult EditANote(TakeANoteModel takeANoteModel,int userID, int noteId)
         {
-            var result = iNoteBusiness.EditANote(takeANoteModel,userID, noteId);
 
-            if (result != null)
+            try
             {
-                return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note edited successfully", Data = result });
+                var result = iNoteBusiness.EditANote(takeANoteModel, userID, noteId);
+
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note edited successfully", Data = result });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+           
         }
 
 
@@ -89,15 +172,29 @@ namespace FundooNotes.Controllers
         [Route("IsPin")]
         public IActionResult isPin(int noteId)
         {
-            var result = iNoteBusiness.isPin(noteId);
-            if (result)
+
+            try
             {
-                return Ok(new ResponseModel<bool> { Success = true, Message = "Pinned" ,Data = result });
+                var result = iNoteBusiness.isPin(noteId);
+                //throw new Exception("Error");
+
+                if (result)
+                {
+                    logger.LogInformation("Pinned Note successfully");
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Pinned", Data = result });
+                }
+               
+                else
+                {
+                    return NotFound(new ResponseModel<bool> { Success = false, Message = "unPinned", Data = result });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<bool> { Success = false, Message = "unPinned" , Data = result });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+           
         }
 
 
@@ -105,15 +202,24 @@ namespace FundooNotes.Controllers
         [Route("Archive")]
         public IActionResult IsArchive(int noteId)
         {
-            var result = iNoteBusiness.IsArchive(noteId);
-            if (result)
+            try
             {
-                return Ok(new ResponseModel<bool> { Success = true, Message = "Archived", Data = result });
+                var result = iNoteBusiness.IsArchive(noteId);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Archived", Data = result });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<bool> { Success = false, Message = "UnArchived", Data = result });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<bool> { Success = false, Message = "UnArchived", Data = result });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
         }
 
 
@@ -121,15 +227,24 @@ namespace FundooNotes.Controllers
         [Route("TrashNotes")]
         public IActionResult TrashNotes(int noteId)
         {
-            var result = iNoteBusiness.TrashNotes(noteId);
-            if (result)
+            try
             {
-                return Ok(new ResponseModel<bool> { Success = true, Message = "Trashed", Data = result });
+                var result = iNoteBusiness.TrashNotes(noteId);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Trashed", Data = result });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<bool> { Success = false, Message = "Not Trashed", Data = result });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<bool> { Success = false, Message = "Not Trashed", Data = result });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
         }
 
 
@@ -137,16 +252,25 @@ namespace FundooNotes.Controllers
         [Route("Delete")]
         public IActionResult Delete_A_Note(int userID)
         {
-            var result = iNoteBusiness.Delete_A_note(userID);
+            try
+            {
+                var result = iNoteBusiness.Delete_A_note(userID);
 
-            if (result != null)
-            {
-                return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note Delete successfully"});
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note Delete successfully" });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
         }
     }
 }

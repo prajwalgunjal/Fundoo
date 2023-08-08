@@ -6,6 +6,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Services;
 using System;
@@ -19,11 +20,14 @@ namespace FundooNotes.Controllers
     {
         private readonly IBus _bus;
         private IUserBusiness iUserBusiness;
-        public UserController (IUserBusiness iUserBusiness, IBus _bus)
+        private ILogger<UserController> logger;
+        public UserController (IUserBusiness iUserBusiness, IBus _bus, ILogger<UserController> logger)
         {
             this.iUserBusiness = iUserBusiness;
             this._bus = _bus;
+            this.logger = logger;
         }
+
         [HttpPost]
         // request url:-  localhost/Controller_name/MethodRoute
         [Route("Register")]
@@ -43,33 +47,48 @@ namespace FundooNotes.Controllers
         [Route("Login")]
         public IActionResult Login(LoginModel loginModel)
         {
-            var result = iUserBusiness.Login(loginModel);
-            if (result != null)
+            try
             {
-                return Ok(new ResponseModel<string> { Success = true, Message = "Login Successfull", Data = result });
+                var result = iUserBusiness.Login(loginModel);
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Login Successfull", Data = result });
+                }
+                
+                else
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
             }
-            else
-                return BadRequest(new ResponseModel<string> { Success = false, Message = "Email Not Found", Data = null });
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
         }
 
         [Authorize]
         [HttpPost("Reset Password")]
         public IActionResult ResetPassword(ResetPasswordModel resetPassword)
         {
-            string email = User.FindFirst(x => x.Type == "Email").Value;
-            var result = iUserBusiness.ForgetPassword(email,resetPassword);
-            if(result != null)
+            try
             {
-                return Ok(new ResponseModel<ResetPasswordModel> { Success = true, Message = "password reset succesfull", Data = result });
+                string email = User.FindFirst(x => x.Type == "Email").Value;
+                var result = iUserBusiness.ForgetPassword(email, resetPassword);
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<ResetPasswordModel> { Success = true, Message = "password reset succesfull", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<ResetPasswordModel> { Success = false, Message = "not reset succesfull", Data = null });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new ResponseModel<ResetPasswordModel> { Success = false, Message = "not reset succesfull", Data = null });
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
+            
         }
-
-
-
 
         [HttpPost("forget-password")]
         public async Task<IActionResult> UserForgetPassword(string email)
@@ -95,7 +114,8 @@ namespace FundooNotes.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
             }
         }
     }

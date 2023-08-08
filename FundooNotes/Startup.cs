@@ -41,6 +41,9 @@ namespace FundooNotes
             services.AddTransient<IUserBusiness, UserBusiness>();
             services.AddTransient<INoteRepo, NoteRepo>();
             services.AddTransient<INoteBusiness, NoteBusiness>();
+            services.AddTransient<ILabelRepo, LabelRepo>();
+            services.AddTransient<ILabelBusiness,LabelBusiness>();
+
             services.AddSwaggerGen();
 
             ConfigureSwagger(services);
@@ -82,7 +85,6 @@ namespace FundooNotes
             });
             services.AddMassTransitHostedService();
             services.AddControllers();
-
         }   
 
         private static void ConfigureSwagger(IServiceCollection services)

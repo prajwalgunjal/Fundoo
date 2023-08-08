@@ -15,5 +15,7 @@ namespace BusinessLayer.Interfaces
         public bool isPin(int noteId);
         public bool TrashNotes(int noteId);
         public bool IsArchive(int noteId);
+        public string ChangeColour(int noteId, string colour);
+        public DateTime SetReminder(int noteId, DateTime dateTime);
     }
 }

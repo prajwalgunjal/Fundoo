@@ -47,5 +47,13 @@ namespace BusinessLayer.Services
         {
             return noteRepo.IsArchive(noteId);
         }
+        public string ChangeColour(int noteId, string colour)
+        {
+            return noteRepo.ChangeColour(noteId, colour);
+        }
+        public DateTime SetReminder(int noteId, DateTime dateTime)
+        {
+            return noteRepo.SetReminder(noteId,dateTime);
+        }
     }
 }

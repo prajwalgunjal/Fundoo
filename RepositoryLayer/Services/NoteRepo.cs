@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
+using RepositoryLayer.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +54,6 @@ namespace RepositoryLayer.Services
                 NoteEntity noteEntity = new NoteEntity();
                 bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == userID);
                 bool noteIDExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
-
                 noteEntity = fundoo_Context_Note.Notes.Where(x => x.UserId == userID && x.noteID == noteId).FirstOrDefault();
                 if (idExist && noteIDExist)
                 {
@@ -88,6 +88,51 @@ namespace RepositoryLayer.Services
             }
            
         }
+
+        public string ChangeColour(int noteId, string colour)
+        {
+            try
+            {
+                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
+                if (idExist)
+                {
+                    NoteEntity noteEntity = fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
+                    noteEntity.colour = colour;
+                    fundoo_Context_Note.SaveChanges();
+                    return "colour changed";
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
+        }
+
+        public DateTime SetReminder(int noteId,DateTime dateTime)
+        {
+                bool idExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
+                NoteEntity noteEntity = fundoo_Context_Note.Notes.FirstOrDefault(x => x.noteID == noteId);
+
+                if (idExist)
+                {
+                    noteEntity.reminder =dateTime;
+                    fundoo_Context_Note.SaveChanges();
+                    return noteEntity.reminder;
+                }
+                else
+                {
+                    noteEntity.reminder = DateTime.Now;
+                    fundoo_Context_Note.SaveChanges();
+                    return noteEntity.reminder;
+                }
+            
+        }
+
 
         public bool isPin(int noteId)
         {
@@ -140,7 +185,6 @@ namespace RepositoryLayer.Services
 
                 throw ex;
             }
-            
         }
         public bool IsArchive(int noteId)
         {

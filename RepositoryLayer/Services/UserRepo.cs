@@ -118,7 +118,6 @@ namespace RepositoryLayer.Services
             {
                 throw ex;
             }
- 
         }
 
         public ResetPasswordModel ForgetPassword(string email,ResetPasswordModel reset)
@@ -139,6 +138,7 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+
         private string GenerateToken(string Email ,int userID)
         {
             try
@@ -163,9 +163,7 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
             
-
         }
-        
 
         public static string EncodePasswordToBase64(string password)
         {
