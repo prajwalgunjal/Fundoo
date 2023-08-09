@@ -19,5 +19,7 @@ namespace RepositoryLayer.Interface
 
         public DateTime SetReminder(int noteId, DateTime dateTime,int userID);
 
+        public string UploadImage(string filePath, long notesId, long userId);
+
     }
 }

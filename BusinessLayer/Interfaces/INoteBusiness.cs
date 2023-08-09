@@ -18,5 +18,6 @@ namespace BusinessLayer.Interfaces
         public string ChangeColour(int noteId, string colour, int userID);
 
         public DateTime SetReminder(int noteId, DateTime dateTime, int userID);
+        public string UploadImage(string filePath, long notesId, long userId);
     }
 }

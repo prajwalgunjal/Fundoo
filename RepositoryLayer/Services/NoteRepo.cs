@@ -1,4 +1,7 @@
-﻿using CommonLayer.RequestModels;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.RequestModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
@@ -7,6 +10,7 @@ using RepositoryLayer.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 
 namespace RepositoryLayer.Services
@@ -256,7 +260,61 @@ namespace RepositoryLayer.Services
             {
                 throw ex;
             }
-          
+
         }
-    }
+
+      /*  public ImageUploadResult UploadImage(IFormFile imagePath) 
+        {
+            Account account = new Account(configuration["Cloudinary: CloudName"], configuration["Cloudinary: ApiKey"], configuration["Cloudinary: ApiSecret"]);
+            Cloudinary cloud = new Cloudinary(account);
+            var uploadParams = new ImageUploadParams()
+            {
+
+                File = new FileDescription(imagePath.FileName, imagePath.OpenReadStream()),
+            };
+            var uploadImageRes = cloud.Upload(uploadParams);
+            if (uploadImageRes != null) 
+            {
+                return uploadImageRes;
+            }
+            else {
+                    return null;
+            }
+
+        }*/
+
+
+        public string UploadImage(string filePath, long notesId, long userId)
+        {
+            var filterUser = fundoo_Context_Note.Notes.Where(e => e.UserId == userId);
+            if (filterUser != null)
+            {
+                var findNotes = filterUser.FirstOrDefault(e => e.noteID == notesId);
+                if(findNotes != null) 
+                {
+                        Account account = new Account("dzhcgkbwm", "931298622371919", "mmivF3zF1tY-HHyq8HNGaRB5pPs");
+                        Cloudinary cloudinary = new Cloudinary(account);
+                        ImageUploadParams uploadParams = new ImageUploadParams()
+                        {
+                            File = new FileDescription(filePath),
+                            PublicId = findNotes.title
+                        };
+
+                        ImageUploadResult uploadResult = cloudinary.Upload(uploadParams);
+
+                        findNotes.updatedAt = DateTime.Now;
+                        findNotes.image = uploadResult.Url.ToString();
+                        fundoo_Context_Note.SaveChanges();
+                        return "Upload Successfull";
+                }
+                    return null;
+                }
+                else
+                {
+                    return null; 
+                }
+        }
+
+            
+        }
 }

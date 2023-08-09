@@ -29,5 +29,10 @@ namespace BusinessLayer.Services
         {
             return LabelRepo.DisplayByLabel(label,userID);
         }
+
+        public LabelEntity Delete_Label_Of_A_Note(int noteID, int userid)
+        {
+            return LabelRepo.Delete_Label_Of_A_Note(noteID, userid);
+        }
     }
 }

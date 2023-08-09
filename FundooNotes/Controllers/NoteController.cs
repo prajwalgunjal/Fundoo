@@ -285,5 +285,31 @@ namespace FundooNotes.Controllers
             }
             
         }
+
+        [HttpPost]
+        [Route("UploadImage")]
+        public IActionResult UploadImage(string filePath, long notesId)
+        {
+            try
+            {
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.UploadImage(filePath,notesId,userID);
+
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Image Uploaded", Data = result });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<string> { Success = false, Message = "Image not Uploaded", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

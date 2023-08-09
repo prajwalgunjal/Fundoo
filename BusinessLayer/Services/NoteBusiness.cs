@@ -55,5 +55,9 @@ namespace BusinessLayer.Services
         {
             return noteRepo.SetReminder(noteId,dateTime, userID);
         }
+        public string UploadImage(string filePath, long notesId, long userId)
+        {
+            return noteRepo.UploadImage(filePath, notesId, userId);
+        }
     }
 }

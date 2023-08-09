@@ -29,5 +29,6 @@ namespace RepositoryLayer.Entity
 
         [JsonIgnore]
         public virtual UserEntity User { get; set; }
+
     }
 }

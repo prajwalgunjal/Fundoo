@@ -46,20 +46,34 @@ namespace RepositoryLayer.Services
 
         public List<NoteEntity> DisplayByLabel(string label, int userID)
         {
-            int noteId;
+            List<int> noteId;
             List<NoteEntity> noteEntity;
             bool checkLabel = fundoo_Context_Note.Labels.Any(x => x.Label == label && x.UserId == userID);
-            noteId = fundoo_Context_Note.Labels.Where(x => x.Label == label).Select(x => x.noteID).FirstOrDefault();
+            noteId = fundoo_Context_Note.Labels.Where(x => x.Label == label).Select(x => x.noteID).ToList();
 
             if (checkLabel)
             {
-               noteEntity = fundoo_Context_Note.Notes.Where(x => x.noteID == noteId).ToList();
-               return noteEntity;
+                //noteEntity = fundoo_Context_Note.Notes.Where(x => x.noteID == noteId).ToList();
+                noteEntity = fundoo_Context_Note.Labels.Where(x => x.Label == label && x.UserId == userID).Join(fundoo_Context_Note.Notes, x => x.noteID, y => y.noteID, (x, y) => y).ToList();
+                return noteEntity;
             }
             else
             {
                 return null;
             }
+        }
+
+        public LabelEntity Delete_Label_Of_A_Note(int noteID,int userid)
+        {
+            var checkNoteID = fundoo_Context_Note.Labels.Any(x=> x.noteID == noteID && x.UserId == userid);
+            if (checkNoteID)
+            {
+                LabelEntity labelEntity = fundoo_Context_Note.Labels.FirstOrDefault(x => x.noteID == noteID);
+                fundoo_Context_Note.Remove(labelEntity);
+                fundoo_Context_Note.SaveChanges();
+                return labelEntity;
+            }
+            else { return null; }   
         }
 
 

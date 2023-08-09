@@ -35,7 +35,7 @@ namespace FundooNotes.Controllers
 
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("DisplayByLabel")]
         public IActionResult DisplayByLabel(string label)
         {
@@ -53,7 +53,7 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetLabels")]
         public IActionResult GetLabels(string label)
         {
@@ -70,6 +70,24 @@ namespace FundooNotes.Controllers
                 return BadRequest(new ResponseModel<List<LabelEntity>> { Success = false, Message = "label not Found", Data = null });
 
             }
+        }
+
+
+        [HttpDelete]
+        [Route("Delete_Label_Of_Note")]
+        public IActionResult Delete_Label_Of_A_Note(int noteID)
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result = ilabelBusiness.Delete_Label_Of_A_Note(noteID, userID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<LabelEntity> { Success = true, Message = "Label deleted", Data = result });
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<LabelEntity> { Success = false, Message = "Label not deleted", Data = null }); ;
+            }
+
         }
     }
 }

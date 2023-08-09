@@ -79,3 +79,4 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.config
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\CloudinaryDotNet.dll
