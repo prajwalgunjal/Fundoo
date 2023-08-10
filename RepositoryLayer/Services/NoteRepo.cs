@@ -2,7 +2,11 @@
 using CloudinaryDotNet.Actions;
 using CommonLayer.RequestModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
@@ -12,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RepositoryLayer.Services
 {
@@ -19,6 +24,7 @@ namespace RepositoryLayer.Services
     {
         private Fundoo_Context fundoo_Context_Note;
         private readonly IConfiguration configuration;
+  
         public NoteRepo(Fundoo_Context fundoo_Context, IConfiguration configuration)
         {
             this.fundoo_Context_Note = fundoo_Context;
@@ -262,26 +268,44 @@ namespace RepositoryLayer.Services
             }
 
         }
-
-      /*  public ImageUploadResult UploadImage(IFormFile imagePath) 
+        public List<NoteEntity> Get_All_Notes_Without_Login()
         {
-            Account account = new Account(configuration["Cloudinary: CloudName"], configuration["Cloudinary: ApiKey"], configuration["Cloudinary: ApiSecret"]);
-            Cloudinary cloud = new Cloudinary(account);
-            var uploadParams = new ImageUploadParams()
+            try
             {
-
-                File = new FileDescription(imagePath.FileName, imagePath.OpenReadStream()),
-            };
-            var uploadImageRes = cloud.Upload(uploadParams);
-            if (uploadImageRes != null) 
-            {
-                return uploadImageRes;
+               
+                    List<NoteEntity> noteEntities = fundoo_Context_Note.Notes.ToList();
+                    return noteEntities;
+           
             }
-            else {
-                    return null;
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
-        }*/
+        }
+        
+
+        
+
+        /*  public ImageUploadResult UploadImage(IFormFile imagePath) 
+          {
+              Account account = new Account(configuration["Cloudinary: CloudName"], configuration["Cloudinary: ApiKey"], configuration["Cloudinary: ApiSecret"]);
+              Cloudinary cloud = new Cloudinary(account);
+              var uploadParams = new ImageUploadParams()
+              {
+
+                  File = new FileDescription(imagePath.FileName, imagePath.OpenReadStream()),
+              };
+              var uploadImageRes = cloud.Upload(uploadParams);
+              if (uploadImageRes != null) 
+              {
+                  return uploadImageRes;
+              }
+              else {
+                      return null;
+              }
+
+          }*/
 
 
         public string UploadImage(string filePath, long notesId, long userId)

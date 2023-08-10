@@ -45,6 +45,20 @@ namespace FundooNotes
             services.AddTransient<ILabelBusiness,LabelBusiness>();
             services.AddTransient<ICollabRepo, CollabRepo>();
             services.AddTransient<ICollabBusiness, CollabBusiness>();
+            services.AddDistributedMemoryCache();
+            services.AddStackExchangeRedisCache(
+            options =>
+            {
+               options.Configuration = "localhost:6379";
+            });
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(120);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
 
             services.AddSwaggerGen();
 
@@ -126,6 +140,7 @@ namespace FundooNotes
             
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             // This middleware serves generated Swagger document as a JSON endpoint
             app.UseSwagger();

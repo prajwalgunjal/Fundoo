@@ -24,5 +24,18 @@ namespace BusinessLayer.Services
         {
             return icollabRepo.GetCollabEntities(userID,noteid);
         }
+
+        public CollabEntity RemoveCollab(int userID, int collabID, int noteID)
+        {
+            return icollabRepo.RemoveCollab(userID, collabID, noteID);
+        }
+        public List<CollabEntity> Get_All_Collabs(int userID)
+        {
+            return icollabRepo.Get_All_Collabs(userID);
+        }
+        public List<NoteEntity> Get_All_Note_For_One_Collab(int userID, int CollabID)
+        {
+            return icollabRepo.Get_All_Note_For_One_Collab(userID, CollabID);
+        }
     }
 }

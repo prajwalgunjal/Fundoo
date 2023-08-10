@@ -130,6 +130,25 @@ namespace RepositoryLayer.Services
 
         }
 
+        public UserEntity LoginWithoutAutho(LoginModel loginModel)
+        {
+            try
+            {
+                string encodedPassword = EncodePasswordToBase64(loginModel.Password);
+                var checkEmail = fundoo_Context.Users.FirstOrDefault(e=> e.Email == loginModel.Email && e.Password == encodedPassword);
+                if(checkEmail != null)
+                {
+                    return checkEmail;
+                }
+                else
+                { return null; }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public ForgotPasswordModel UserForgotPassword(string email)
         {

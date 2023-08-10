@@ -58,6 +58,11 @@ namespace BusinessLayer.Services
         public string UploadImage(string filePath, long notesId, long userId)
         {
             return noteRepo.UploadImage(filePath, notesId, userId);
+
+        }
+        public List<NoteEntity> Get_All_Notes_Without_Login()
+        {
+            return noteRepo.Get_All_Notes_Without_Login();
         }
     }
 }

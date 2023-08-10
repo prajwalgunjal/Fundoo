@@ -2,25 +2,34 @@
 using CommonLayer.Models;
 using CommonLayer.RequestModels;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Migrations;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+ 
     public class NoteController : ControllerBase
     {
         private INoteBusiness iNoteBusiness;
         private ILogger<UserController> logger;
-        public NoteController(INoteBusiness iNoteBusiness, ILogger<UserController> logger)
+        private readonly IDistributedCache distributedCache;
+        public NoteController(INoteBusiness iNoteBusiness, ILogger<UserController> logger, IDistributedCache distributedCache)
         {
             this.iNoteBusiness = iNoteBusiness;
             this.logger = logger;
+            this.distributedCache = distributedCache;   
         }
         [HttpPost]
         // request url:-  localhost/Controller_name/MethodRoute
@@ -29,10 +38,12 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+               // int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+                int userID = (int)HttpContext.Session.GetInt32("UserId");
                 var result = iNoteBusiness.TakeANote(takeANoteModel, userID);
                 if (result != null)
                 {
+                    logger.LogInformation("Note added Successfully");
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note added Successfull", Data = result });
                 }
                 else
@@ -45,9 +56,7 @@ namespace FundooNotes.Controllers
                 logger.LogError(ex.ToString());
                 return BadRequest(ex.ToString());
             }
-            
         }
-       
 
         /* [HttpGet]
          [Route("Display")]
@@ -66,9 +75,71 @@ namespace FundooNotes.Controllers
                  return NotFound(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found for the user", Data = null });
              }
          }*/
+
+        [HttpGet]
+        [Route("GetAllNotesUsingRedis")]
+        public async Task<IActionResult> GetAllNotesUsingRedis()
+        {
+            try
+            {
+                var CacheKey = "NotesList";
+                List<NoteEntity> NoteList;
+                byte[] RedishNoteList = await distributedCache.GetAsync(CacheKey);
+                if (RedishNoteList != null)
+                {
+                    logger.LogDebug("Getting the list from redis cache");
+                    var SerializedNoteList = Encoding.UTF8.GetString(RedishNoteList);
+                    NoteList = JsonConvert.DeserializeObject<List<NoteEntity>>(SerializedNoteList);
+                }
+                else
+                {
+                    logger.LogDebug("Setting the list to cache which is requested for the first time");
+                    NoteList = (List<NoteEntity>)iNoteBusiness.Get_All_Notes_Without_Login();
+                    var SerializedNoteList = JsonConvert.SerializeObject(NoteList);
+                    var redishNoteList = Encoding.UTF8.GetBytes(SerializedNoteList);
+                    var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(DateTime.Now.AddMinutes(10)).SetSlidingExpiration(TimeSpan.FromMinutes(1));
+                    await distributedCache.SetAsync(CacheKey, redishNoteList, options);
+                }
+                logger.LogInformation("Got the notes list successfully from redish");
+                return Ok(NoteList);
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex, "Exception thrown...");
+                return BadRequest(new { Success = false, Message = ex.Message });
+            }
+
+
+        }
+
+        [HttpGet("Get_All_Notes_Without_Login")]
+            public IActionResult Get_All_Notes_Without_Login()
+            {
+            try
+            {
+                var result = iNoteBusiness.Get_All_Notes_Without_Login();
+
+                if (result != null)
+                {
+                    logger.LogInformation("Display successfull");
+                    return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Display successfull", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<List<NoteEntity>> { Success = false, Message = "No notes found", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+
+        }
+
         [HttpGet("Display")]
             public IActionResult Display()
-        {
+            {
             try
             {
                 int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
@@ -77,6 +148,7 @@ namespace FundooNotes.Controllers
 
                 if (result != null)
                 {
+                    logger.LogInformation("Display successfull");
                     return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Display successfull", Data = result });
                 }
                 else
@@ -102,6 +174,7 @@ namespace FundooNotes.Controllers
                 var result = iNoteBusiness.ChangeColour(noteId, colour, userID);
                 if (result != null)
                 {
+                    logger.LogInformation("Display successfull");
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Colour changed successfull" });
                 }
                 else
@@ -130,6 +203,7 @@ namespace FundooNotes.Controllers
 
                 if (result == dateTime)
                 {
+                    logger.LogInformation("Display successfull");
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Reminder set successfull" });
                 }
                 else
@@ -157,11 +231,11 @@ namespace FundooNotes.Controllers
 
                 if (result != null)
                 {
+                    logger.LogInformation("Display successfull");
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note edited successfully", Data = result });
                 }
                 else
                 {
-                    return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
                     return BadRequest(new ResponseModel<NoteEntity> { Success = false, Message = "Note not found", Data = null });
                 }
             }
@@ -172,7 +246,7 @@ namespace FundooNotes.Controllers
             }
            
         }
-
+       
 
         [HttpPut]
         [Route("IsPin")]
@@ -217,6 +291,7 @@ namespace FundooNotes.Controllers
                 var result = iNoteBusiness.IsArchive(noteId, userID);
                 if (result)
                 {
+                    logger.LogInformation("Display successfull");
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Archived", Data = result });
                 }
                 else
@@ -243,6 +318,8 @@ namespace FundooNotes.Controllers
                 var result = iNoteBusiness.TrashNotes(noteId,userID);
                 if (result)
                 {
+                    logger.LogInformation("Display successfull");
+
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Trashed", Data = result });
                 }
                 else
@@ -271,6 +348,8 @@ namespace FundooNotes.Controllers
 
                 if (result != null)
                 {
+                    logger.LogInformation("Display successfull");
+
                     return Ok(new ResponseModel<NoteEntity> { Success = true, Message = "Note Delete successfully", Data = result});
                 }
                 else
@@ -298,6 +377,8 @@ namespace FundooNotes.Controllers
 
                 if (result != null)
                 {
+                    logger.LogInformation("Display successfull");
+
                     return Ok(new ResponseModel<string> { Success = true, Message = "Image Uploaded", Data = result });
                 }
                 else

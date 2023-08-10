@@ -76,6 +76,20 @@ namespace RepositoryLayer.Services
             else { return null; }   
         }
 
+        public List<LabelEntity> DisplayAllLabel(int userId)
+        {
+            List<LabelEntity> labelEntities = new List<LabelEntity>();
+            labelEntities = fundoo_Context_Note.Labels.Where(x=> x.UserId == userId).ToList();
+            if(labelEntities!= null)
+            {
+                return labelEntities;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
 
     }

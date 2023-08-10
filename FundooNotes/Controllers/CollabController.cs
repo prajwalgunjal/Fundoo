@@ -53,10 +53,56 @@ namespace FundooNotes.Controllers
             else
             {
                 return NotFound(new ResponseModel<List<CollabEntity>> { Success = false, Message = "Not Displayed", Data = null });
-
             }
         }
+        [HttpDelete]
+        [Route("RemoveCollab")]
+        public IActionResult RemoveCollab(int collabID, int noteID)
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result = icollabBusiness.RemoveCollab(userID,collabID, noteID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<CollabEntity> { Success = true, Message = "Removed", Data = result });
 
+            }
+            else
+            {
+                return NotFound(new ResponseModel<CollabEntity>{ Success = false, Message = "Not Displayed", Data = null });
+            }
+        }
+        [HttpGet]
+        [Route("GetAllCollabs")]
+        public IActionResult Get_All_Collabs()
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result = icollabBusiness.Get_All_Collabs(userID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<CollabEntity>> { Success = true, Message = "Displayed", Data = result });
+
+            }
+            else
+            {
+                return NotFound(new ResponseModel<List<CollabEntity>> { Success = false, Message = "Not Displayed", Data = null });
+            }
+        }
+        [HttpGet]
+        [Route("GetAllNoteForOneCollab")]
+        public IActionResult Get_All_Note_For_One_Collab(int CollabID)
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result = icollabBusiness.Get_All_Note_For_One_Collab(userID,CollabID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<NoteEntity>> { Success = true, Message = "Displayed", Data = result });
+
+            }
+            else
+            {
+                return NotFound(new ResponseModel<List<NoteEntity>> { Success = false, Message = "Not Displayed", Data = null });
+            }
+        }
 
     }
 }

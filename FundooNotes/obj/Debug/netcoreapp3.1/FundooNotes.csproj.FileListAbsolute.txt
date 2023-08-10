@@ -80,3 +80,7 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.config
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\CloudinaryDotNet.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\StackExchange.Redis.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll

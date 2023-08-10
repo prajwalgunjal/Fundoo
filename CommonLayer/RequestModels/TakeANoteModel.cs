@@ -17,8 +17,8 @@ namespace CommonLayer.RequestModels
         public DateTime updatedAt { get; set; }
         public bool pin { get; set; }
         public bool unPin { get; set; }
-        public int noteID { get; set; }
-        public int userID { get; set; }
+        //public int noteID { get; set; }
+        //public int userID { get; set; }
 
     }
 }
