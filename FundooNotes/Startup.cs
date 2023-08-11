@@ -55,8 +55,8 @@ namespace FundooNotes
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(120);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                //options.Cookie.HttpOnly = true;
+                //options.Cookie.IsEssential = true;
             });
 
 
