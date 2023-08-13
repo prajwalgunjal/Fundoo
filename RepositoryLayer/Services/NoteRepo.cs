@@ -245,9 +245,10 @@ namespace RepositoryLayer.Services
             }
            
         }
-
+        
         public List<NoteEntity> GetAll(int userID)
         {
+           
             try
             {
                 int id = fundoo_Context_Note.Users.Where(x => x.UserId == userID).Select(x => x.UserId).FirstOrDefault();
@@ -266,7 +267,6 @@ namespace RepositoryLayer.Services
             {
                 throw ex;
             }
-
         }
         public List<NoteEntity> Get_All_Notes_Without_Login()
         {
@@ -282,10 +282,25 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
 
-        }
-        
 
-        
+        }
+
+        public bool SearchNote(string notetitle, int userId)
+        {
+            try
+            {
+                bool exists = fundoo_Context_Note.Notes.Any(x => x.title == notetitle && x.UserId == userId);
+
+                return exists;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
 
         /*  public ImageUploadResult UploadImage(IFormFile imagePath) 
           {
@@ -337,8 +352,10 @@ namespace RepositoryLayer.Services
                 {
                     return null; 
                 }
-        }
-
             
+        }
+        
+
+
         }
 }

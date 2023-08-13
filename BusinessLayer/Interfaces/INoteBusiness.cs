@@ -20,5 +20,6 @@ namespace BusinessLayer.Interfaces
         public DateTime SetReminder(int noteId, DateTime dateTime, int userID);
         public string UploadImage(string filePath, long notesId, long userId);
         public List<NoteEntity> Get_All_Notes_Without_Login();
+        public bool SearchNote(string notetitle, int userId);
     }
 }

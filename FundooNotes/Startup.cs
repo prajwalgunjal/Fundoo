@@ -19,6 +19,7 @@ using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNotes
@@ -82,7 +83,7 @@ namespace FundooNotes
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
                 
@@ -137,10 +138,11 @@ namespace FundooNotes
             {
                 app.UseDeveloperExceptionPage();
             }
-            
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
+
+           
 
             // This middleware serves generated Swagger document as a JSON endpoint
             app.UseSwagger();

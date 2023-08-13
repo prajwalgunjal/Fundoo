@@ -12,5 +12,6 @@ namespace BusinessLayer.Interfaces
         public List<LabelEntity> GetLabels(string label, int userID);
         public List<NoteEntity> DisplayByLabel(string label, int userID);
         public LabelEntity Delete_Label_Of_A_Note(int noteID, int userid);
+        public List<LabelEntity> DisplayAllLabel(int userId);
     }
 }

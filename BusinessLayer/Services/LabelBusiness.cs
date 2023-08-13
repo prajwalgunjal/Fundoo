@@ -34,5 +34,9 @@ namespace BusinessLayer.Services
         {
             return LabelRepo.Delete_Label_Of_A_Note(noteID, userid);
         }
+        public List<LabelEntity> DisplayAllLabel(int userId)
+        {
+            return LabelRepo.DisplayAllLabel(userId);
+        }
     }
 }

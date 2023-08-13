@@ -88,6 +88,22 @@ namespace FundooNotes.Controllers
                 return BadRequest(new ResponseModel<LabelEntity> { Success = false, Message = "Label not deleted", Data = null }); ;
             }
 
+            
+        }
+        [HttpPost("DisplayAllLabel")]
+        public IActionResult DisplayAllLabel()
+        {
+            int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+            var result = ilabelBusiness.DisplayAllLabel(userID);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<LabelEntity>> { Success = true, Message = "Label deleted", Data = result });
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<LabelEntity> { Success = false, Message = "Label not deleted", Data = null }); ;
+            }
+
         }
     }
 }

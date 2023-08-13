@@ -25,20 +25,23 @@ namespace FundooNotes.Controllers
         private INoteBusiness iNoteBusiness;
         private ILogger<UserController> logger;
         private readonly IDistributedCache distributedCache;
-        public NoteController(INoteBusiness iNoteBusiness, ILogger<UserController> logger, IDistributedCache distributedCache)
+        private ILabelBusiness iLabelBusiness;
+        public NoteController(INoteBusiness iNoteBusiness, ILogger<UserController> logger, IDistributedCache distributedCache, ILabelBusiness iLabelBusiness)
         {
             this.iNoteBusiness = iNoteBusiness;
             this.logger = logger;
-            this.distributedCache = distributedCache;   
+            this.distributedCache = distributedCache;  
+            this.iLabelBusiness = iLabelBusiness;
         }
+        
         [HttpPost]
         // request url:-  localhost/Controller_name/MethodRoute
-        [Route("AddNote")]
+        [Route("takeANote")]
         public ActionResult takeANote(TakeANoteModel takeANoteModel)
         {
             try
             {
-               // int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+                //int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
                 int userID = (int)HttpContext.Session.GetInt32("UserId");
                 var result = iNoteBusiness.TakeANote(takeANoteModel, userID);
                 if (result != null)
@@ -143,9 +146,9 @@ namespace FundooNotes.Controllers
             try
             {
                 int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-
+                
                 var result = iNoteBusiness.GetAll(userID);
-
+                
                 if (result != null)
                 {
                     logger.LogInformation("Display successfull");
@@ -384,6 +387,33 @@ namespace FundooNotes.Controllers
                 else
                 {
                     return NotFound(new ResponseModel<string> { Success = false, Message = "Image not Uploaded", Data = null });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return BadRequest(ex.ToString());
+            }
+        }
+        [HttpGet("SearchNote")]
+        public IActionResult SearchNote(string notetitle)
+        {
+
+            try
+            {
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
+
+                var result = iNoteBusiness.SearchNote(notetitle, userID);
+
+                if (result)
+                {
+                    logger.LogInformation("Note found");
+
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Note FOund" });
+                }
+                else
+                {
+                    return NotFound(new ResponseModel<string> { Success = false, Message = "Note Not Found"});
                 }
             }
             catch (Exception ex)

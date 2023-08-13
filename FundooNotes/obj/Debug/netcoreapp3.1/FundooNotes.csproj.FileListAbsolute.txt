@@ -1,3 +1,4 @@
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.config
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\FundooNotes.exe
@@ -7,6 +8,7 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Fund
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\FundooNotes.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\FundooNotes.pdb
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Automatonymous.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\CloudinaryDotNet.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\GreenPipes.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\MassTransit.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\MassTransit.AspNetCoreIntegration.dll
@@ -21,6 +23,7 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Micr
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.StackExchangeRedis.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.Extensions.PlatformAbstractions.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Abstractions.dll
@@ -33,12 +36,18 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Micr
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NewId.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\RabbitMQ.Client.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\StackExchange.Redis.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.Text.Encodings.Web.dll
@@ -75,12 +84,3 @@ C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\Fund
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.dll
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.pdb
 C:\Users\prajw\source\repos\FundooNotes\FundooNotes\obj\Debug\netcoreapp3.1\FundooNotes.genruntimeconfig.cache
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\NLog.config
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\CloudinaryDotNet.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.StackExchangeRedis.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\StackExchange.Redis.dll
-C:\Users\prajw\source\repos\FundooNotes\FundooNotes\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll

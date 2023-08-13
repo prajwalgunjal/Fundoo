@@ -164,6 +164,7 @@ namespace FundooNotes.Controllers
                 if (result != null)
                 {
                     //session set
+                    //HttpContext.Session.SetInt32("UserId", result.UserId);
                     HttpContext.Session.SetInt32("UserId", result.UserId);
                     return Ok(new ResponseModel<UserEntity> { Success = true, Message = "Login Successfull ", Data = result });
                 }

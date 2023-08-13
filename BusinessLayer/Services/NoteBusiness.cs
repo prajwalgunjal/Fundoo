@@ -64,5 +64,10 @@ namespace BusinessLayer.Services
         {
             return noteRepo.Get_All_Notes_Without_Login();
         }
+
+        public bool SearchNote(string notetitle, int userId)
+        {
+            return noteRepo.SearchNote(notetitle, userId);
+        }
     }
 }
