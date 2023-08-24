@@ -67,20 +67,17 @@ namespace RepositoryLayer.Services
                 noteEntity = fundoo_Context_Note.Notes.Where(x => x.UserId == userID && x.noteID == noteId).FirstOrDefault();
                 if (idExist && noteIDExist)
                 {
-                    /*noteEntity.UserId = userID;
-                    noteEntity.title = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.title).FirstOrDefault();
-                    noteEntity.takeANote = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.takeANote).FirstOrDefault();
-                    noteEntity.updatedAt = DateTime.Now;
-                    noteEntity.colour = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.colour).FirstOrDefault();
-                    noteEntity.pin = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.pin).FirstOrDefault();
-                    noteEntity.archive = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.archive).FirstOrDefault();
-                    noteEntity.image = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.image).FirstOrDefault();
-                    noteEntity.reminder = fundoo_Context_Note.Notes.Where(x => x.UserId == userID).Select(x => x.reminder).FirstOrDefault();
-                    */
+                 /*   UserEntity user = fundooDBContext.Users.Where(x => x.UserId == userId).Join(fundooDBContext.Collaborations.Where(x => x.NoteId == noteId), x => x.Email, y => y.CollabEmail, (x, y) => x).FirstOrDefault(); 
+                    if (user != null) 
+                    { 
+                        noteEntity = fundooDBContext.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
+                    }*/
+
+
                     noteEntity.UserId = userID;
                     noteEntity.title = takeANoteModel.title;
                     noteEntity.takeANote = takeANoteModel.takeANote;
-                    takeANoteModel.updatedAt = DateTime.Now;
+                    noteEntity.updatedAt = DateTime.Now;
                     noteEntity.colour = takeANoteModel.colour;
                     noteEntity.pin = takeANoteModel.pin;
                     noteEntity.archive = takeANoteModel.archive;

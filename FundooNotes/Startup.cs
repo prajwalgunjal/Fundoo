@@ -36,6 +36,7 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
             services.AddDbContext<Fundoo_Context>(x => x.UseSqlServer(Configuration["ConnectionString:FundooConnection"]));
             services.AddTransient<IUserRepo, UserRepo>();
@@ -85,6 +86,9 @@ namespace FundooNotes
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
+
+                //angular
+                services.AddCors();
             });
                 
             // rabbitmq startup code 
@@ -134,13 +138,23 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //angular
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
+            app.UseSession();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
+            
 
            
 
