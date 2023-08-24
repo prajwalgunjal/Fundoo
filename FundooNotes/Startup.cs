@@ -54,13 +54,6 @@ namespace FundooNotes
                options.Configuration = "localhost:6379";
             });
 
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(120);
-                //options.Cookie.HttpOnly = true;
-                //options.Cookie.IsEssential = true;
-            });
-
 
             services.AddSwaggerGen();
 
@@ -146,7 +139,6 @@ namespace FundooNotes
                 .SetIsOriginAllowed(origin => true) // allow any origin
                 .AllowCredentials()); // allow credentials
 
-            app.UseSession();
 
             if (env.IsDevelopment())
             {

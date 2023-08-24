@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RepositoryLayer.Services
 {
@@ -23,7 +24,7 @@ namespace RepositoryLayer.Services
             this.fundoo_Context = fundoo_Context;
             this.configuration = configuration;
         }
-        public UserEntity Regsiter(RegistrationModel registrationModel)
+        /*public UserEntity Regsiter(RegistrationModel registrationModel)
         {
             try
             {
@@ -50,7 +51,62 @@ namespace RepositoryLayer.Services
             {
                 throw ex;
             } 
+        }*/
+
+
+        public UserEntity Regsiter(RegistrationModel registrationModel)
+        {
+            try
+            {
+                // Validate input fields using regex
+                if (!Regex.IsMatch(registrationModel.FirstName, @"^[A-Za-z]+$"))
+                {
+                    throw new Exception("Invalid first name.");
+                }
+
+                if (!Regex.IsMatch(registrationModel.LastName, @"^[A-Za-z]+$"))
+                {
+                    throw new Exception("Invalid last name.");
+                }
+
+                if (!Regex.IsMatch(registrationModel.Email, @"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"))
+                {
+                    throw new Exception("Invalid email address.");
+                }
+
+                if (!Regex.IsMatch(registrationModel.Password, @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"))
+                {
+                    throw new Exception("Invalid password. Password must be at least 8 characters long and contain at least one letter and one digit.");
+                }
+
+                UserEntity userEntity = new UserEntity();
+                bool emailExists = fundoo_Context.Users.Any(x => x.Email == registrationModel.Email);
+
+                if (!emailExists)
+                {
+                    userEntity.FirstName = registrationModel.FirstName;
+                    userEntity.LastName = registrationModel.LastName;
+                    userEntity.Email = registrationModel.Email;
+                    userEntity.Password = EncodePasswordToBase64(registrationModel.Password);
+                    userEntity.createdAt = DateTime.Now;
+                    userEntity.updatedAt = DateTime.Now;
+
+                    fundoo_Context.Users.Add(userEntity);
+                    fundoo_Context.SaveChanges();
+
+                    return userEntity;
+                }
+                else
+                {
+                    return null; // Return null to indicate that registration failed due to existing email
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
         public bool CheckEmail(string email)
         {
             try
@@ -130,26 +186,7 @@ namespace RepositoryLayer.Services
 
         }
 
-        public UserEntity LoginWithoutAutho(LoginModel loginModel)
-        {
-            try
-            {
-                string encodedPassword = EncodePasswordToBase64(loginModel.Password);
-                var checkEmail = fundoo_Context.Users.FirstOrDefault(e=> e.Email == loginModel.Email && e.Password == encodedPassword);
-                if(checkEmail != null)
-                {
-                    return checkEmail;
-                }
-                else
-                { return null; }
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
+     
         public ForgotPasswordModel UserForgotPassword(string email)
         {
             try

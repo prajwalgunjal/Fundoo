@@ -154,31 +154,7 @@ namespace FundooNotes.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        [HttpPost]
-        [Route("LoginWithoutAutho")]
-        public IActionResult LoginWithoutAutho(LoginModel loginModel)
-        {
-            try
-            {
-                var result = iUserBusiness.LoginWithoutAutho(loginModel);
-                if (result != null)
-                {
-                    //session set
-                    //HttpContext.Session.SetInt32("UserId", result.UserId);
-                    HttpContext.Session.SetInt32("UserId", result.UserId);
-                    return Ok(new ResponseModel<UserEntity> { Success = true, Message = "Login Successfull ", Data = result });
-                }
-                else
-                {
-                    return BadRequest(new ResponseModel<UserEntity> { Success = false, Message = "Login unsuccessfull", Data = null });
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.ToString());
-                return BadRequest(ex.ToString());
-            }
-        }
+        
     }
 }
 

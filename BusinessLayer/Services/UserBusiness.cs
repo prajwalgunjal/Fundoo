@@ -44,9 +44,6 @@ namespace BusinessLayer.Services
         {
             return userRepository.ByPassLogin();
         }
-        public UserEntity LoginWithoutAutho(LoginModel loginModel)
-        {
-            return userRepository.LoginWithoutAutho(loginModel);
-        }
+        
     }
 }

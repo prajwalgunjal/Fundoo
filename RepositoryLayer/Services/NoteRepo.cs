@@ -62,18 +62,17 @@ namespace RepositoryLayer.Services
             try
             {
                 NoteEntity noteEntity = new NoteEntity();
-                bool idExist = fundoo_Context_Note.Notes.Any(x => x.UserId == userID);
                 bool noteIDExist = fundoo_Context_Note.Notes.Any(x => x.noteID == noteId);
                 noteEntity = fundoo_Context_Note.Notes.Where(x => x.UserId == userID && x.noteID == noteId).FirstOrDefault();
-                if (idExist && noteIDExist)
+                /*UserEntity user = fundoo_Context_Note.Users.Where(x => x.UserId == userID)
+                    .Join(fundoo_Context_Note.Collabs.Where(x => x.noteID == noteId),
+                    x => x.Email, y => y.Email, (x, y) => x).FirstOrDefault();
+                if (user != null)
                 {
-                 /*   UserEntity user = fundooDBContext.Users.Where(x => x.UserId == userId).Join(fundooDBContext.Collaborations.Where(x => x.NoteId == noteId), x => x.Email, y => y.CollabEmail, (x, y) => x).FirstOrDefault(); 
-                    if (user != null) 
-                    { 
-                        noteEntity = fundooDBContext.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
-                    }*/
-
-
+                    noteEntity = fundoo_Context_Note.Notes.Where(x => x.noteID == noteId).FirstOrDefault();
+                }*/
+                if (noteEntity!=null)
+                {
                     noteEntity.UserId = userID;
                     noteEntity.title = takeANoteModel.title;
                     noteEntity.takeANote = takeANoteModel.takeANote;
@@ -84,7 +83,7 @@ namespace RepositoryLayer.Services
                     noteEntity.image = takeANoteModel.image;
                     noteEntity.reminder = takeANoteModel.reminder;
                     fundoo_Context_Note.SaveChanges();
-                    return noteEntity;
+                    return noteEntity;  
                 }
                 else { return null; }
             }

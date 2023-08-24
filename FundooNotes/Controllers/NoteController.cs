@@ -41,8 +41,7 @@ namespace FundooNotes.Controllers
         {
             try
             {
-                //int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
-                int userID = (int)HttpContext.Session.GetInt32("UserId");
+                int userID = Convert.ToInt32(this.User.FindFirst("UserId").Value);
                 var result = iNoteBusiness.TakeANote(takeANoteModel, userID);
                 if (result != null)
                 {

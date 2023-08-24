@@ -12,6 +12,6 @@ namespace RepositoryLayer.Interface
         public ForgotPasswordModel UserForgotPassword(string email);
         public ResetPasswordModel ForgetPassword(string email, ResetPasswordModel reset);
         public string ByPassLogin();
-        public UserEntity LoginWithoutAutho(LoginModel loginModel);
+        
     }
 }
